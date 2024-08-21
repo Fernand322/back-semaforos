@@ -8,8 +8,12 @@ app = Flask(__name__)
 
 # Configurar la conexión a MongoDB usando variables de entorno
 MONGO_URI = os.getenv('MONGO_URI')
-mongo_client = pymongo.MongoClient(MONGO_URI)
-db = mongo_client["arduino_db"]
+try:
+    mongo_client = pymongo.MongoClient(MONGO_URI)
+    db = mongo_client["arduino_db"]
+except PyMongoError as e:
+    print(f"Failed to connect to MongoDB: {e}")
+    raise
 
 # Definir las colecciones de nodos y de fallos
 nodo_collections = {
